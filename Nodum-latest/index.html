@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c0c0b">
+  <meta name="description" content="Nodum — the cozy, local-first place to talk. Custom profiles, badges, decorations, voice, and communities.">
+  <title>Nodum — come talk with us</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles-v3.css">
+  <link rel="stylesheet" href="styles-atrium.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <div class="auth-screen" id="authScreen" hidden>
+    <div class="auth-glow auth-glow-one" aria-hidden="true"></div>
+    <div class="auth-glow auth-glow-two" aria-hidden="true"></div>
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M13.5 35V13l21 22V13" stroke="currentColor" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M37.4 8.4l1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2 1.2-2.8Z" fill="#fff"/>
+          </svg>
+        </span>
+        <span class="brand-word">Nodum</span>
+      </div>
+
+      <div class="auth-copy">
+        <div class="eyebrow">Private by default</div>
+        <h1>Welcome to Nodum</h1>
+        <p>Your email and password stay in this browser. They are never shown to staff, owners, or anyone else.</p>
+      </div>
+
+      <div class="auth-tabs" id="authTabs" role="tablist" aria-label="Account access">
+        <button class="auth-tab active" type="button" data-auth-tab="signin" role="tab" aria-selected="true">Sign in</button>
+        <button class="auth-tab" type="button" data-auth-tab="signup" role="tab" aria-selected="false">Create account</button>
+      </div>
+
+      <form class="auth-form" id="signInForm" autocomplete="on">
+        <label class="auth-field"><span>Email</span><input id="signInEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label class="auth-field"><span>Password</span><input id="signInPassword" type="password" autocomplete="current-password" required placeholder="Your password"></label>
+        <button class="primary-btn auth-submit" type="submit">Sign in</button>
+        <button class="auth-passkey" type="button" id="passkeySignInBtn">
+          <span class="auth-passkey-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/><path d="m11 11 8 8m-3-3 2-2m-4 0 2-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Use a passkey
+        </button>
+      </form>
+
+      <form class="auth-form" id="signUpForm" autocomplete="on" hidden>
+        <div class="auth-field-row">
+          <label class="auth-field"><span>Display name</span><input id="signUpName" maxlength="32" autocomplete="nickname" required placeholder="What people call you"></label>
+          <label class="auth-field"><span>Username</span><input id="signUpHandle" maxlength="24" autocomplete="username" required placeholder="yourhandle"></label>
+        </div>
+        <label class="auth-field"><span>Email</span><input id="signUpEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+        <label class="auth-field"><span>Password</span><input id="signUpPassword" type="password" autocomplete="new-password" minlength="6" required placeholder="At least 6 characters"></label>
+        <button class="primary-btn auth-submit" type="submit">Create account</button>
+        <p class="auth-note">We'll email you a 6-digit code to confirm your address. Nothing leaves this device except that email.</p>
+      </form>
+
+      <div class="auth-verify" id="verifyPanel" hidden>
+        <div class="verify-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="m3 6.5 9 6 9-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="m17.5 15.5 1.6 1.6 3-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2>Check your inbox</h2>
+        <p class="verify-copy">We emailed a 6-digit code to <strong id="verifyEmail">your email</strong>. It expires in 10 minutes.</p>
+        <form class="auth-form" id="verifyForm">
+          <label class="auth-field"><span>Verification code</span><input id="verifyCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></label>
+          <p class="verify-meta" id="verifyMeta"></p>
+          <button class="primary-btn auth-submit" type="submit" id="verifySubmit">Verify email</button>
+        </form>
+        <div class="verify-actions">
+          <button class="auth-link" type="button" data-verify-resend>Resend code</button>
+          <button class="auth-link" type="button" data-verify-change>Change email</button>
+          <button class="auth-link" type="button" data-verify-fallback>Email not arriving?</button>
+        </div>
+        <div class="verify-fallback" id="verifyFallback" hidden>
+          <strong id="verifyFallbackTitle">Your code on this device</strong>
+          <p id="verifyFallbackCopy">Nodum runs in your browser, so it can show the code here when email delivery is unavailable. Start the mail relay to receive real email.</p>
+          <div class="verify-code" id="verifyLocalCode">------</div>
+        </div>
+      </div>
+
+      <p class="auth-error" id="authError" role="alert" hidden></p>
+      <p class="auth-foot">Local-first. No cloud, no tracking, no paywalls. The first account becomes the owner.</p>
+    </div>
+  </div>
+
+  <div class="app-frame" id="appFrame" hidden>
+    <header class="topbar">
+      <button class="mobile-menu-btn topbar-menu" id="mobileMenuBtn" type="button" aria-label="Open navigation">
+        <span data-icon="menu"></span>
+      </button>
+      <button class="topbar-brand" id="homeBtn" type="button" aria-label="Nodum home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M13.5 35V13l21 22V13" stroke="currentColor" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M37.4 8.4l1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2 1.2-2.8Z" fill="#fff"/>
+          </svg>
+        </span>
+        <span class="brand-word">Nodum</span>
+      </button>
+
+      <button class="topbar-search" id="globalSearchBtn" type="button">
+        <span data-icon="search"></span>
+        <span class="topbar-search-copy">Search Nodum</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+
+      <div class="topbar-actions">
+        <button class="top-action" id="notificationsBtn" type="button" title="Notifications" aria-label="Notifications">
+          <span data-icon="bell"></span>
+          <span class="top-action-badge" id="notifBadge" hidden>0</span>
+        </button>
+        <button class="top-action" id="messagesTopBtn" type="button" title="Messages" aria-label="Messages">
+          <span data-icon="message"></span>
+          <span class="top-action-badge" id="dmBadge" hidden>0</span>
+        </button>
+        <button class="top-action" id="friendsTopBtn" type="button" title="Friends" aria-label="Friends">
+          <span data-icon="users"></span>
+        </button>
+        <button class="top-action" id="badgesTopBtn" type="button" title="Badge collection" aria-label="Badge collection">
+          <span data-icon="trophy"></span>
+        </button>
+        <button class="top-action" id="studioTopBtn" type="button" title="Decoration studio" aria-label="Decoration studio">
+          <span data-icon="wand"></span>
+        </button>
+        <button class="top-action" id="appearanceTopBtn" type="button" title="Appearance" aria-label="Appearance">
+          <span data-icon="palette"></span>
+        </button>
+        <button class="top-profile" id="topProfileBtn" type="button" aria-label="Your profile">
+          <span class="avatar-wrap" id="topAvatarWrap"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-shell" id="app">
+      <nav class="server-rail" aria-label="Your servers">
+        <button class="rail-home" id="railHomeBtn" type="button" title="Home" aria-label="Home">
+          <span class="rail-home-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M13.5 35V13l21 22V13" stroke="currentColor" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M37.4 8.4l1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2 1.2-2.8Z" fill="#fff"/>
+            </svg>
+          </span>
+          <span class="rail-tooltip">Home</span>
+        </button>
+        <div class="rail-divider" aria-hidden="true"></div>
+        <div class="server-list" id="serverList"></div>
+        <button class="rail-btn add-server" id="addServerBtn" type="button" title="Create a server" aria-label="Create a server">
+          <span data-icon="plus"></span>
+          <span class="rail-tooltip">Create a server</span>
+        </button>
+        <button class="rail-btn" id="discoverBtn" type="button" title="Discover communities" aria-label="Discover communities">
+          <span data-icon="compass"></span>
+          <span class="rail-tooltip">Discover</span>
+        </button>
+        <div class="rail-spacer"></div>
+        <button class="rail-btn" id="studioRailBtn" type="button" title="Decoration studio" aria-label="Decoration studio">
+          <span data-icon="wand"></span>
+          <span class="rail-tooltip">Decoration studio</span>
+        </button>
+        <button class="rail-btn" id="settingsRailBtn" type="button" title="Settings" aria-label="Settings">
+          <span data-icon="settings"></span>
+          <span class="rail-tooltip">Settings</span>
+        </button>
+      </nav>
+
+      <aside class="channels-panel" id="channelsPanel" aria-label="Channels">
+        <div id="sidebarContent"></div>
+      </aside>
+
+      <main class="chat-panel" id="mainPanel">
+        <div id="mainContent"></div>
+      </main>
+    </div>
+  </div>
+
+  <div class="mobile-scrim" id="mobileScrim" hidden></div>
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <div class="context-menu" id="contextMenu" hidden></div>
+  <div class="emoji-popover" id="emojiPopover" hidden></div>
+  <div id="modalRoot"></div>
+
+  <input type="file" id="avatarUpload" accept="image/*" hidden>
+  <input type="file" id="bannerUpload" accept="image/*" hidden>
+  <input type="file" id="attachmentUpload" accept="image/*" hidden>
+  <input type="file" id="serverIconUpload" accept="image/*" hidden>
+  <input type="file" id="serverBannerUpload" accept="image/*" hidden>
+
+  <script src="app.js"></script>
+</body>
+</html>
